@@ -26,7 +26,8 @@ contract HelperConfig is Script {
         return sepoliaConfig;
     }
 
-    function getAnvilEthConfig()public pure returns(NetworkConfig memory){
-
+    function getAnvilEthConfig()public returns(NetworkConfig memory){
+        vm.startBroadcast();
+        vm.stopBroadcast();
     }
 }
