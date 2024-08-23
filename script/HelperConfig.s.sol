@@ -3,9 +3,13 @@
 pragma solidity 0.8.19;
 import {Fundme} from "../src/Fundme.sol";
 import {Script} from "forge-std/Script.sol";
+import {MockV3Aggregator} from "../test/mocks/MockV3Aggregator.sol";
 
 contract HelperConfig is Script {
     NetworkConfig public activeNetworkConfig;
+
+    uint8 public constant DECIMALS = 8;
+    int256 public constant INITIAL_PRICE = 2000e8;
 
     struct NetworkConfig{
         address priceFeed;
@@ -28,6 +32,12 @@ contract HelperConfig is Script {
 
     function getAnvilEthConfig()public returns(NetworkConfig memory){
         vm.startBroadcast();
+        MockV3Aggregator mockPriceFeed = new MockV3Aggregator(DECIMALS,INITIAL_PRICE);
         vm.stopBroadcast();
+
+        NetworkConfig memory anvilConfig = NetworkConfig({
+            priceFeed:address(mockPriceFeed)
+        });
+        return anvilConfig;
     }
 }
